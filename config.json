@@ -1,0 +1,11 @@
+{
+    "params": {
+        "local_server": "True",
+        "local_uri": "mysql://comp440:pass1234@127.0.0.1/comp440",
+        "blog_name": " BlogPost",
+        "no_of_posts": 6,
+        "admin_user": "root",
+        "admin_password": "12345",
+        "upload_location": "./static/uploads"
+    }
+}

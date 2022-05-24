@@ -1,0 +1,2 @@
+CREATE TABLE `users` (`email` varchar(100) NOT NULL, `password` varchar(500) NOT NULL,`firstName` varchar(100) NOT NULL,`lastName` varchar(50) NOT NULL,`username` varchar(100) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+ALTER TABLE `users` ADD PRIMARY KEY (`username`), ADD UNIQUE KEY `username` (`username`),ADD UNIQUE KEY `email` (`email`);

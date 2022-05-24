@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+<br>
+<br>
+<!-- Page Header -->
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+      <div class="site-heading">
+        <h1 style="text-align: center; font-size: 42px; font-weight: bold; ">User Panel</h1>
+
+      </div>
+    </div>
+  </div>
+</div>
+</header>
+<!-- Main Content -->
+<div class="container mx-auto">
+  <div class="row">
+    <div class="col-lg-10 col-md-10 mx-auto">
+
+
+      <h2>Edit Blogs</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Sno</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Date</th>
+            <th>Views</th>
+
+            <th>Edit</th>
+
+          </tr>
+        </thead>
+        <tbody>
+
+          {% for post in posts %}
+
+          <tr>
+            <td>{{post.sno}}</td>
+            <td>{{post.title}}</td>
+            <td>{{post.author}}</td>
+            <td>{{post.date}}</td>
+            <td style="text-align: center;">{{post.views}}</td>
+
+            <td><a href="/edit/{{post.sno}}"><button class="btn btn-info">Edit</button></a></td>
+
+          </tr>
+
+
+          {% endfor %}
+
+        </tbody>
+      </table>
+
+
+
+    </div>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{% endblock %}

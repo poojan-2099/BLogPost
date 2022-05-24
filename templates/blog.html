@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+{% block content %}
+<br>
+<br>
+<main class="theme-standard">
+  <article class="blog-page">
+    <h2 class="h2 text-uppercase"><a href="/" style="text-decoration: none;">{{post.title}}</a></h2>
+    <p class="blog-content-date" style="font-size: 15px;">Posted by <span style="font-weight: 500; color: green;"><a
+          href="{{url_for('profile', username=post.author)}}">{{post.author}}</a></span> On <i
+        style="color: darkgrey;">{{post.date.strftime('%b %d, %Y')}}</i>
+      <span style="display: flex; float: right; color: rgb(15, 11, 19); font-size: 17px; font-weight: 600;"><i
+          class="far fa-eye"> {{post.views}}</i> &nbsp;&nbsp;&nbsp;&nbsp; <i class="far fa-comment-dots">
+          {{cocomment|count}}</i></span>
+    </p>
+    <hr>
+    <section class="blog-content">
+
+      <p class="blog-content-p">{{post.content | safe}}</p>
+    </section>
+  </article>
+  <hr>
+  <hr>
+  <!-- Comment view -->
+  <div class="card card-comments mb-3 wow fadeIn border-0">
+    <button type="button" class="btn btn-outline-primary btn-lg py-3" data-toggle="collapse" data-target="#demo"
+      style="border: 2px solid rgb(2,117,216); font-size: 20px;">See Comments ({{cocomment|count}})</button>
+    <div class="card-header font-weight-bold p-0 border-0"></div>
+    {%for Comments in cocomment %}
+    <div id="demo" class="collapse">
+      <div class="card-body border-0">
+        <div class="media d-block d-md-flex mt-3">
+          <div class="media-body text-center text-md-left ml-md-3 ml-0">
+            <h5 class="mt-0 font-weight-bold"><a
+                href="{{url_for('profile', username=post.author)}}">{{Comments.username}}</a></h5>
+            {% if Comments.commentType== True %}
+            <p style="font-size: 16px;font-weight: bold; color:green ">Positive <i class="fa fa-thumbs-up"
+                aria-hidden="true"></i></p>
+            {% else %}
+            <p style="font-size: 16px;font-weight: bold; color:red">Negative <i class="fa fa-thumbs-down"
+                aria-hidden="true"></i></p>
+            {% endif %}
+            <p class="date" style="font-size: 12px;">{{Comments.commentdate.strftime('%b %d, %Y %I:%M %p')}}</p>
+            <p style="font-size: 16px;">
+              {{Comments.message}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {%endfor%}
+  </div>
+  <!-- Comment view end -->
+  <!--  General Comment reply -->
+  <form method="POST" id="commentForm">
+    <div class="form-group">
+      <h2 class="heading" style="font-size: 25px; color:rgb(2,117,216);">Write a Comment...</h2>
+
+      <div class="heading" style="font-size: 18px; color:rgb(2,117,216);">
+        Your Thoughts<SELECT name="commentType" id="commentType">
+          <OPTION value="1">Positive</option>
+          <OPTION value="0">Negative</option>
+        </SELECT>
+      </div>
+
+    </div>
+    <div class="form-group">
+      <input type="hidden" value={{post.sno}} name="postid" id="postid">
+      <input type="hidden" value={{session["username"]}} name="username" id="username">
+      <div class="controls">
+        <textarea id="message" name="message" style=" font-size: 16px; border: 1px solid rgb(2,117,216);"
+          class="floatLabel" placeholder="Comment" id="comments" required="required"></textarea>
+      </div>
+      <br>
+      <div class="controls">
+        <button class="btn btn-outline-primary btn-md" type="button" {% for item in cocomment %} {% if
+          (item['username']==session['username']) %} disabled {% endif %} {% endfor %} {% if
+          (post.author==session['username']) %} disabled {% endif %} onclick="formSubmit(event)">Post Comment</button>
+      </div>
+    </div>
+  </form>
+  <div class="form-submission-text" id="afterMessage"></div>
+  <!-- Comment reply end -->
+</main>
+
+<script>
+  function formSubmit(e) {
+
+    e.preventDefault();
+    var params = {
+      "postid": document.getElementById("postid").value,
+      "username": document.getElementById("username").value,
+      "commentType": document.getElementById("commentType").value,
+      "message": document.getElementById("message").value,
+    }
+
+    const url = "/addcomment";
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify(params),
+      redirect: 'follow'
+    };
+
+    fetch(url, requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        result = JSON.parse(result)
+        console.log(result, result["status"]);
+        if (result.status === false) {
+          alert(result["message"]);
+        }
+        else {
+          window.location.reload();
+        }
+      })
+      .catch(error => {
+        document.getElementById("afterMessage").innerHTML = "Error" + error;
+      });
+  }
+</script>
+{% endblock %}

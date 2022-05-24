@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+{% block content %}
+<!-- Page Header -->
+<br>
+<br>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+      <div class="site-heading">
+        <h1 style="text-align: center; font-size: 42px; font-weight: bold; ">User Panel</h1>
+      </div>
+    </div>
+  </div>
+</div>
+</header>
+<script src="//cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+
+<!-- Main Content -->
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-danger alert-dismissible show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+
+      <h2>Add/Edit Post</h2>
+
+      <form name="sentMessage" id="contactForm" action="/edit/{{sno}}" method="post" novalidate>
+        <div class="control-group">
+          <div class="form-group floating-label-form-group controls">
+            <label>Subject</label>
+            <input class="form-control" placeholder="Subject" id="title" name="title" value="{{post.title}}"
+              required="required">
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="form-group floating-label-form-group controls">
+            <label>Tags</label>
+            <input class="form-control" placeholder="Tags" id="tags" name="tags" value="{{post.tags}}"
+              required="required">
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+              <label>Description</label>
+              <textarea rows="5" class="form-control ckeditor" style="border-radius: 13px;" placeholder="Content"
+                name="content" id="long_desc" required="required">{{post.content}}</textarea>
+            </div>
+          </div>
+          <br>
+          <div id="success"></div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-outline-primary" id="sendMessageButton">Publish</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
